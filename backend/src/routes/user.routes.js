@@ -1,20 +1,14 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/requireAuth.js";
-import { requireActiveAccess } from "../middleware/requireActiveAccess.js";
-import {
-  listUsers,
-  invitedCount,
-  // ...other controllers
-} from "../controllers/user.controller.js";
+import { requireAuth, requireActiveAccess } from "../middlewares/auth.middleware.js";
+import { UserController } from "../controllers/user.controller.js";
 
 export const userRouter = Router();
 
-// ✅ allow active users
-userRouter.get("/", requireAuth, requireActiveAccess, listUsers);
+userRouter.get("/", requireAuth(), requireActiveAccess(), UserController.listUsers);
 
 userRouter.get(
   "/me/invited-count",
-  requireAuth,
-  requireActiveAccess,
-  invitedCount
+  requireAuth(),
+  requireActiveAccess(),
+  UserController.myInvitedCount
 );
